@@ -2,8 +2,6 @@
 
 A secure, role-based access control (RBAC) chatbot designed for healthcare platforms, powered by Retrieval-Augmented Generation (RAG) with FastAPI, MongoDB, Pinecone, and LangChain.
 
-![Thumbnail](./assets/thumbnail.png)
-
 ## 📋 Table of Contents
 
 - [Overview](#-overview)
@@ -25,8 +23,6 @@ A secure, role-based access control (RBAC) chatbot designed for healthcare platf
 This project is a secure, role-sensitive chatbot that answers medical queries using Large Language Models (LLMs) and vector-based document retrieval. It supports role-based access for **Doctors**, **Nurses**, **Patients**, and **Admins**, ensuring that sensitive medical information is retrieved and displayed based on user privileges.
 
 The system uses Retrieval-Augmented Generation (RAG) to provide accurate, context-aware responses by retrieving relevant information from uploaded medical documents stored in a vector database.
-
-
 
 ## ✨ Features
 
@@ -54,9 +50,11 @@ The system uses Retrieval-Augmented Generation (RAG) to provide accurate, contex
 ## 🏗️ Architecture
 
 ### Application Flow
+
 ![Application Flow](./assets/applicationFlow.png)
 
 ### Core Modules
+
 ![Core Modules](./assets/coreModules.png)
 
 ### Role-Based Access Flow
@@ -194,6 +192,8 @@ Admins can upload PDF documents targeted to specific roles:
 
 ### 3. Chat Interface
 
+![Doctor Chat](./assets/doctor_chat.png)
+
 - Enter your medical query in the chat input
 - The system will retrieve relevant information based on your role
 - Responses include sources from uploaded documents
@@ -209,22 +209,24 @@ Admins can upload PDF documents targeted to specific roles:
 
 The FastAPI backend provides the following endpoints:
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/health` | Health check endpoint | No |
-| POST | `/signup` | Register new user | No |
-| GET | `/login` | Authenticate user | HTTP Basic |
-| POST | `/upload_docs` | Upload PDF document (Admin only) | HTTP Basic |
-| POST | `/chat` | Send chat message | HTTP Basic |
+| Method | Endpoint       | Description                      | Auth Required |
+| ------ | -------------- | -------------------------------- | ------------- |
+| GET    | `/health`      | Health check endpoint            | No            |
+| POST   | `/signup`      | Register new user                | No            |
+| GET    | `/login`       | Authenticate user                | HTTP Basic    |
+| POST   | `/upload_docs` | Upload PDF document (Admin only) | HTTP Basic    |
+| POST   | `/chat`        | Send chat message                | HTTP Basic    |
 
 ### API Examples
 
 #### Health Check
+
 ```bash
 curl http://127.0.0.1:8000/health
 ```
 
 #### Signup
+
 ```bash
 curl -X POST "http://127.0.0.1:8000/signup" \
      -H "Content-Type: application/json" \
@@ -232,11 +234,13 @@ curl -X POST "http://127.0.0.1:8000/signup" \
 ```
 
 #### Login
+
 ```bash
 curl -u "testuser:testpass" http://127.0.0.1:8000/login
 ```
 
 #### Chat
+
 ```bash
 curl -X POST "http://127.0.0.1:8000/chat" \
      -u "testuser:testpass" \
@@ -252,6 +256,7 @@ rbac-medicalAssistant/
 │   ├── applicationFlow.png
 │   ├── coreModules.png
 │   ├── admin_upload.png
+│   ├── doctor_chat.png
 │   └── projectReport.pdf
 ├── server/                          # Backend FastAPI application
 │   ├── main.py                      # FastAPI app entry point
