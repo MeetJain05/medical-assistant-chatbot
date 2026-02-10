@@ -1,13 +1,14 @@
 from fastapi import APIRouter, Depends, UploadFile, File, Form, HTTPException
-from auth.routes import authenticate
+from auth.routes import get_current_user
 from docs.vectorstore import load_vectorstore
 import uuid
 
 router = APIRouter()
 
+
 @router.post("/upload_docs")
 async def upload_docs(
-    user=Depends(authenticate),
+    user=Depends(get_current_user),
     file: UploadFile = File(...),
     role: str = Form(...)
 ):
@@ -15,9 +16,10 @@ async def upload_docs(
         raise HTTPException(status_code=403, detail="Only admin can upload files")
 
     doc_id = str(uuid.uuid4())
-    await load_vectorstore([file], role, doc_id)  # ✅ AWAIT here
+    await load_vectorstore([file], role, doc_id)
     return {
         "message": f"{file.filename} uploaded successfully",
         "doc_id": doc_id,
         "accessible_to": role
     }
+

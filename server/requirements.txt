@@ -28,7 +28,9 @@ tqdm
 
 # Authentication
 pymongo[bson] 
-bcrypt 
+bcrypt
+PyJWT
+python-jose[cryptography] 
 
 
 
