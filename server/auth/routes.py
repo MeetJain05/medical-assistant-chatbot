@@ -1,17 +1,27 @@
-from fastapi import APIRouter, HTTPException, Depends
-from fastapi.security import HTTPBearer, HTTPAuthCredentials
+from fastapi import APIRouter, HTTPException, Depends, Query
+from fastapi.requests import Request
 from .models import SignupRequest
 from .hash_utils import hash_password, verify_password
 from .jwt_utils import create_access_token, verify_token
 from config.db import users_collection
 
 router = APIRouter()
-security = HTTPBearer()
 
 
-def get_current_user(credentials: HTTPAuthCredentials = Depends(security)):
-    """Dependency to extract and verify JWT token from request"""
-    token = credentials.credentials
+def get_current_user(request: Request):
+    """Dependency to extract and verify JWT token from Authorization header"""
+    auth_header = request.headers.get("Authorization")
+    
+    if not auth_header:
+        raise HTTPException(status_code=401, detail="Missing authorization header")
+    
+    try:
+        scheme, token = auth_header.split(" ")
+        if scheme.lower() != "bearer":
+            raise HTTPException(status_code=401, detail="Invalid authentication scheme")
+    except ValueError:
+        raise HTTPException(status_code=401, detail="Invalid authorization header format")
+    
     payload = verify_token(token)
     
     if not payload:
@@ -43,7 +53,7 @@ def signup(req: SignupRequest):
 
 
 @router.post("/login")
-def login(username: str, password: str):
+def login(username: str = Query(...), password: str = Query(...)):
     """Login and get JWT token"""
     user = users_collection.find_one({"username": username})
     
